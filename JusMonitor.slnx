@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="JusMonitor.API/JusMonitor.API.csproj" />
+  <Project Path="JusMonitor.Application/JusMonitor.Application.csproj" />
+  <Project Path="JusMonitor.Domain/JusMonitor.Domain.csproj" />
+  <Project Path="JusMonitor.Infrastructure/JusMonitor.Infrastructure.csproj" />
+  <Project Path="JusMonitor.Worker/JusMonitor.Worker.csproj" />
+</Solution>
