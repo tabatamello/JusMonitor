@@ -17,7 +17,21 @@ public record DataJudHit(
 public record DataJudSource(
     [property: JsonPropertyName("numeroProcesso")] string NumeroProcesso,
     [property: JsonPropertyName("tribunal")] string Tribunal,
+    [property: JsonPropertyName("orgaoJulgador")] DataJudOrgaoJulgador? OrgaoJulgador,
+    [property: JsonPropertyName("assuntos")] IEnumerable<DataJudAssunto>? Assuntos,
     [property: JsonPropertyName("movimentos")] IEnumerable<DataJudMovimento> Movimentos
+)
+{
+    public string? Vara => OrgaoJulgador?.Nome;
+    public string? Assunto => Assuntos?.FirstOrDefault()?.Nome;
+}
+
+public record DataJudOrgaoJulgador(
+    [property: JsonPropertyName("nome")] string Nome
+);
+
+public record DataJudAssunto(
+    [property: JsonPropertyName("nome")] string Nome
 );
 
 public record DataJudMovimento(

@@ -1,21 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
-
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-JusMonitor.Worker-d16af3e6-e0be-4dec-b444-7df13b15a4a1</UserSecretsId>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.23" />
-    <PackageReference Include="Hangfire.PostgreSql" Version="1.21.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\JusMonitor.Application\JusMonitor.Application.csproj" />
-    <ProjectReference Include="..\JusMonitor.Infrastructure\JusMonitor.Infrastructure.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>dotnet-JusMonitor.Worker-d16af3e6-e0be-4dec-b444-7df13b15a4a1</UserSecretsId>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.23" />
+		<PackageReference Include="Hangfire.PostgreSql" Version="1.21.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.6" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\JusMonitor.Application\JusMonitor.Application.csproj" />
+		<ProjectReference Include="..\JusMonitor.Infrastructure\JusMonitor.Infrastructure.csproj" />
+	</ItemGroup>
 </Project>
