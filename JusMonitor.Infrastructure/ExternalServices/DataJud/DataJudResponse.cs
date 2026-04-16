@@ -7,7 +7,12 @@ public record DataJudApiResponse(
 );
 
 public record DataJudHits(
-    [property: JsonPropertyName("hits")] IEnumerable<DataJudHit> Hits
+    [property: JsonPropertyName("hits")] IEnumerable<DataJudHit>? Hits,
+    [property: JsonPropertyName("total")] DataJudTotal? Total
+);
+
+public record DataJudTotal(
+    [property: JsonPropertyName("value")] int Value
 );
 
 public record DataJudHit(
@@ -19,7 +24,7 @@ public record DataJudSource(
     [property: JsonPropertyName("tribunal")] string Tribunal,
     [property: JsonPropertyName("orgaoJulgador")] DataJudOrgaoJulgador? OrgaoJulgador,
     [property: JsonPropertyName("assuntos")] IEnumerable<DataJudAssunto>? Assuntos,
-    [property: JsonPropertyName("movimentos")] IEnumerable<DataJudMovimento> Movimentos
+    [property: JsonPropertyName("movimentos")] IEnumerable<DataJudMovimento>? Movimentos
 )
 {
     public string? Vara => OrgaoJulgador?.Nome;

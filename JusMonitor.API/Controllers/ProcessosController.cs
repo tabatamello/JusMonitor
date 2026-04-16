@@ -4,6 +4,9 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace JusMonitor.API.Controllers;
 
@@ -76,11 +79,27 @@ public class ProcessosController(
     [HttpGet("consultar-datajud")]
     public async Task<IActionResult> ConsultarDataJud([FromQuery] string numeroProcesso, CancellationToken ct)
     {
-        var resultado = await dataJudService.ConsultarProcessoAsync(numeroProcesso, ct);
+        var numeroLimpo = numeroProcesso.Replace("-", "").Replace(".", "");
 
-        if (resultado is null)
-            return NotFound(new { erro = "Processo não encontrado no DataJud." });
+        var json = JsonSerializer.Serialize(new
+        {
+            query = new { match = new { numeroProcesso = numeroLimpo } }
+        });
 
-        return Ok(resultado);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        using var httpClient = HttpContext.RequestServices
+            .GetRequiredService<IHttpClientFactory>()
+            .CreateClient();
+
+        httpClient.DefaultRequestHeaders.Add("Authorization",
+            $"ApiKey {HttpContext.RequestServices.GetRequiredService<IConfiguration>()["DataJud:ApiKey"]}");
+
+        var response = await httpClient.PostAsync(
+            "https://api-publica.datajud.cnj.jus.br/api_publica_tjsp/_search", content, ct);
+
+        var raw = await response.Content.ReadAsStringAsync(ct);
+
+        return Ok(new { status = response.StatusCode, body = raw });
     }
 }

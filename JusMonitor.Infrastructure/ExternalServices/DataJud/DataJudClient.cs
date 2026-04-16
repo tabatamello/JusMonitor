@@ -13,20 +13,17 @@ public class DataJudClient(HttpClient httpClient) : IDataJudService
         string numeroProcesso,
         CancellationToken ct = default)
     {
+        var numeroLimpo = numeroProcesso.Replace("-", "").Replace(".", "");
+
         var query = new
         {
             query = new
             {
                 match = new
                 {
-                    numeroProcesso = new
-                    {
-                        query = numeroProcesso,
-                        operator_ = "and"
-                    }
+                    numeroProcesso = numeroLimpo
                 }
-            },
-            size = 1
+            }
         };
 
         var json = JsonSerializer.Serialize(query);
@@ -37,11 +34,15 @@ public class DataJudClient(HttpClient httpClient) : IDataJudService
         if (!response.IsSuccessStatusCode)
             return null;
 
-        var result = await response.Content.ReadFromJsonAsync<DataJudApiResponse>(
-            cancellationToken: ct);
+        var rawJson = await response.Content.ReadAsStringAsync(ct);
+
+        var result = JsonSerializer.Deserialize<DataJudApiResponse>(rawJson);
+
+        var total = result?.Hits?.Total?.Value ?? 0;
+        if (total == 0)
+            return null;
 
         var source = result?.Hits?.Hits?.FirstOrDefault()?.Source;
-
         if (source is null)
             return null;
 
@@ -50,7 +51,7 @@ public class DataJudClient(HttpClient httpClient) : IDataJudService
             source.Tribunal,
             source.Vara,
             source.Assunto,
-            source.Movimentos.Select(m => new DataJudMovimentacaoResult(
+            (source.Movimentos ?? []).Select(m => new DataJudMovimentacaoResult(
                 m.Nome,
                 m.DataHora,
                 m.Codigo)));
